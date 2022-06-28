@@ -40,3 +40,16 @@
            (str/join "\n")
            (spit "out/col2.txt")))))
 
+;13. col1.txtとcol2.txtをマージ
+; 12で作ったcol1.txtとcol2.txtを結合し，
+; 元のファイルの1列目と2列目をタブ区切りで並べたテキストファイルを作成せよ．確認にはpasteコマンドを用いよ．
+(defn col1_txtとcol_txtをマージ []
+  (with-open [col1-rdr (io/reader "out/col1.txt")
+              col2-rdr (io/reader "out/col2.txt")]
+    (let [col1-lines (doall (line-seq col1-rdr))
+          col2-lines (doall (line-seq col2-rdr))]
+      (->> (map vector col1-lines (repeat "\t") col2-lines (repeat "\n"))
+           (map str/join)
+           (str/join)
+           (spit "out/col1+col2.txt")))))
+
