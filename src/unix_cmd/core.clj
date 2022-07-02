@@ -53,3 +53,45 @@
            (str/join)
            (spit "out/col1+col2.txt")))))
 
+;14. 先頭からN行を出力
+; 自然数Nをコマンドライン引数などの手段で受け取り，入力のうち先頭のN行だけを表示せよ．確認にはheadコマンドを用いよ．
+(defn 先頭からN行を出力 [n]
+  (with-open [rdr (io/reader data-file)]
+    (->> (line-seq rdr)
+         (take n)
+         (str/join "\n")
+         (println)
+         (doall))))
+
+;15. 末尾のN行を出力
+; 自然数Nをコマンドライン引数などの手段で受け取り，入力のうち末尾のN行だけを表示せよ．確認にはtailコマンドを用いよ．
+(defn 末尾のN行を出力 [n]
+  (with-open [rdr (io/reader data-file)]
+    (->> (line-seq rdr)
+         (take-last n)
+         (str/join "\n")
+         (println)
+         (doall))))
+
+;16. ファイルをN分割する
+;自然数Nをコマンドライン引数などの手段で受け取り，入力のファイルを行単位でN分割せよ．同様の処理をsplitコマンドで実現せよ．
+(defn ファイルをN分割する [n]
+  (with-open [rdr (io/reader data-file)]
+    (let [全行 (doall (line-seq rdr))
+          全行数 (count 全行)
+          分割行数 (->> (/ 全行数 n) (double) (Math/ceil) (int))
+          分割ファイル内容リスト (->> (partition-all 分割行数 全行) (map #(str/join "\n" %)))]
+      (doseq [[idx item] (map-indexed vector 分割ファイル内容リスト)]
+        (spit (format "out/split-%s.txt" idx) item)))))
+
+;17. １列目の文字列の異なり
+; 1列目の文字列の種類（異なる文字列の集合）を求めよ．確認にはcut, sort, uniqコマンドを用いよ．
+(defn _１列目の文字列の異なり []
+  (with-open [rdr (io/reader data-file)]
+    (let [lines (doall (line-seq rdr))]
+      (->> lines
+           (map #(str/split % #"\t"))
+           (map first)
+           (str/join)
+           (set)))))
+
