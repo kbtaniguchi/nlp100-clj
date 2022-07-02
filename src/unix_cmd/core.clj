@@ -92,6 +92,27 @@
       (->> lines
            (map #(str/split % #"\t"))
            (map first)
-           (str/join)
-           (set)))))
+           (set)
+           (vec)
+           (sort)))))
 
+;18. 各行を3コラム目の数値の降順にソート
+; 各行を3コラム目の数値の逆順で整列せよ（注意: 各行の内容は変更せずに並び替えよ）．
+; 確認にはsortコマンドを用いよ（この問題はコマンドで実行した時の結果と合わなくてもよい）．
+(defn 各行を3コラム目の数値の降順にソート []
+  (with-open [rdr (io/reader data-file)]
+    (let [lines (doall (line-seq rdr))]
+      (->> lines
+           (map #(str/split % #"\t"))
+           (sort-by #(nth % 2))))))
+
+;19. 各行の1コラム目の文字列の出現頻度を求め，出現頻度の高い順に並べる
+;各行の1列目の文字列の出現頻度を求め，その高い順に並べて表示せよ．確認にはcut, uniq, sortコマンドを用いよ．
+(defn 各行の1コラム目の文字列の出現頻度を求め，出現頻度の高い順に並べる []
+  (with-open [rdr (io/reader data-file)]
+    (let [lines (doall (line-seq rdr))
+          col1-list (->> lines (map #(str/split % #"\t")) (map first))]
+      (->> col1-list
+           (frequencies)
+           (sort-by second)
+           (reverse)))))
