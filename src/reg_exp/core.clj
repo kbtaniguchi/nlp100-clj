@@ -1,6 +1,7 @@
 (ns reg-exp.core
   (:require [clojure.java.io :as io]
-            [cheshire.core :as cheshire])
+            [cheshire.core :as cheshire]
+            [clojure.string :as str])
   (:import (java.util.zip GZIPInputStream)))
 
 ;第3章: 正規表現
@@ -29,3 +30,15 @@
          (:text)
          (doall))))
 
+;21. カテゴリ名を含む行を抽出
+; 記事中でカテゴリ名を宣言している行を抽出せよ．
+(defn カテゴリ名を含む行を抽出 []
+  (->> (str/split (JSONデータの読み込み) #"\n")
+       (filter #(str/starts-with? % "[[Category:"))))
+
+;22. カテゴリ名の抽出
+;記事のカテゴリ名を（行単位ではなく名前で）抽出せよ．
+(defn カテゴリ名の抽出 []
+  (->> (JSONデータの読み込み)
+       (re-seq #"\[\[Category:(.+)\]\]")
+       (map second)))
