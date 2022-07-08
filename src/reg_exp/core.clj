@@ -1,8 +1,12 @@
 (ns reg-exp.core
   (:require [clojure.java.io :as io]
             [cheshire.core :as cheshire]
-            [clojure.string :as str])
+            [clojure.string :as str]
+            [portal.api :as p])
   (:import (java.util.zip GZIPInputStream)))
+
+(def p (p/open {:launcher :intellij}))
+(add-tap #'p/submit)
 
 ;第3章: 正規表現
 ;Wikipediaの記事を以下のフォーマットで書き出したファイルjawiki-country.json.gzがある．
@@ -42,3 +46,15 @@
   (->> (JSONデータの読み込み)
        (re-seq #"\[\[Category:(.+)\]\]")
        (map second)))
+
+;23. セクション構造
+;記事中に含まれるセクション名とそのレベル（例えば”== セクション名 ==”なら1）を表示せよ．
+(defn セクション構造 []
+  (->> (JSONデータの読み込み)
+       (re-seq #"(==+)(.+?)==+")
+       (map #(hash-map :name (nth % 2)
+                       :level (-> %
+                                  (second)
+                                  (count)
+                                  (- 1))))))
+

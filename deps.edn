@@ -1,4 +1,6 @@
 {:paths ["src", "resources"]
  :deps  {
          cheshire/cheshire {:mvn/version "5.11.0"}
+         djblue/portal {:mvn/version "0.28.0"}
          }}
+
